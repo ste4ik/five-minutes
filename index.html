@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пять минут — анонимная записка</title>
+<meta name="description" content="Анонимная записка, которая живёт пять минут. Шифруется в браузере и хранится только в ссылке — без сервера, аккаунтов и трекинга.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2eee3">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141412">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'none'">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='8'%20fill='%231a1b18'/%3E%3Ccircle%20cx='47'%20cy='17'%20r='5'%20fill='%23b0391d'/%3E%3Ctext%20x='30'%20y='46'%20font-family='monospace'%20font-size='34'%20font-weight='700'%20fill='%23f2eee3'%20text-anchor='middle'%3E5%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #f2eee3;
+    --panel: #faf7ef;
+    --ink: #1a1b18;
+    --soft: #625d4d;
+    --line: #d7cfba;
+    --rule: rgba(26, 27, 24, 0.055);
+    --accent: #a8341a;
+    --accent-ink: #fbf6ec;
+    --mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --paper: #141412;
+      --panel: #1c1b17;
+      --ink: #ece7da;
+      --soft: #a39b88;
+      --line: #35322b;
+      --rule: rgba(236, 231, 218, 0.05);
+      --accent: #e0603a;
+      --accent-ink: #1b100c;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background-color: var(--paper);
+    background-image: repeating-linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px 32px);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  .shell {
+    width: min(100% - 40px, 780px);
+    margin: 0 auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bar {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 20px 0 14px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+
+  .wordmark {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .wordmark .colon { color: var(--accent); }
+  .wordmark:hover .colon { color: var(--ink); }
+
+  .tag {
+    font-size: 13px;
+    color: var(--soft);
+  }
+
+  .status {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--soft);
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  main {
+    flex: 1;
+    width: min(100%, 640px);
+    padding: clamp(36px, 7vw, 76px) 0 72px;
+  }
+
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+  }
+  .kicker::before {
+    content: "";
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    flex: none;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(30px, 5.2vw, 46px);
+    line-height: 1.07;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .lede {
+    margin: 16px 0 34px;
+    max-width: 47ch;
+    font-size: 16.5px;
+    color: var(--soft);
+    text-wrap: pretty;
+  }
+
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--soft);
+  }
+
+  #note-input {
+    display: block;
+    width: 100%;
+    min-height: 190px;
+    padding: 14px 16px;
+    resize: vertical;
+    background: var(--panel);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.65;
+    caret-color: var(--accent);
+  }
+  #note-input::placeholder { color: var(--soft); opacity: 0.7; }
+  #note-input:focus {
+    outline: none;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 1px var(--ink);
+  }
+
+  .form-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 18px;
+    margin-top: 14px;
+  }
+
+  .ttl { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .ttl-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--soft);
+  }
+
+  .seg {
+    display: inline-flex;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .seg label { position: relative; display: block; }
+  .seg input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .seg span {
+    display: block;
+    padding: 7px 12px 8px;
+    border-left: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--soft);
+  }
+  .seg label:first-child span { border-left: 0; }
+  .seg input:checked + span { background: var(--ink); color: var(--paper); }
+  .seg input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .count {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .count.over { color: var(--accent); font-weight: 700; }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .btn {
+    appearance: none;
+    padding: 11px 18px;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn:disabled { opacity: 0.55; cursor: progress; }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .btn-primary:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn-ghost { border-color: var(--line); color: var(--soft); }
+  .btn-ghost:hover { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+
+  .btn.is-done { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+  .hint {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--soft);
+  }
+
+  .error {
+    margin: 16px 0 0;
+    padding-left: 12px;
+    border-left: 2px solid var(--accent);
+    font-size: 13.5px;
+    color: var(--accent);
+  }
+
+  .linkbox { display: flex; margin-top: 4px; }
+  .linkbox input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    background: var(--panel);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-right: 0;
+    border-radius: 2px 0 0 2px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.45;
+    text-overflow: ellipsis;
+  }
+  .linkbox input:focus { outline: none; border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .linkbox .btn { border-radius: 0 2px 2px 0; flex: none; }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 34px;
+    margin: 22px 0 0;
+  }
+  .facts dt {
+    margin-bottom: 3px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--soft);
+  }
+  .facts dd {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .warn {
+    margin: 26px 0 0;
+    padding-left: 14px;
+    border-left: 2px solid var(--line);
+    font-size: 13.5px;
+    color: var(--soft);
+    max-width: 62ch;
+  }
+  .warn strong { color: var(--ink); font-weight: 600; }
+
+  .timer {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 2px 0 20px;
+  }
+  .timer-digits {
+    font-family: var(--mono);
+    font-size: clamp(44px, 9vw, 62px);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .timer-digits.danger { color: var(--accent); }
+  .timer-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--soft);
+  }
+
+  .note {
+    margin: 0;
+    padding: 20px;
+    max-height: 52vh;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    tab-size: 2;
+  }
+
+  .stamp {
+    display: inline-block;
+    margin: 6px 0 22px;
+    padding: 9px 15px 7px;
+    border: 3px double var(--accent);
+    border-radius: 3px;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transform: rotate(-5deg);
+    opacity: 0.88;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  footer {
+    padding: 22px 0 34px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: var(--soft);
+  }
+
+  .foot-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 18px;
+  }
+
+  footer a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  footer a:hover { color: var(--accent); }
+
+  .how { margin-top: 12px; }
+  .how summary {
+    cursor: pointer;
+    color: var(--ink);
+    width: fit-content;
+  }
+  .how summary:hover { color: var(--accent); }
+  .how summary::marker { color: var(--accent); }
+  .how div {
+    margin-top: 10px;
+    max-width: 64ch;
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--soft);
+  }
+  .how p { margin: 0 0 8px; }
+
+  @media (max-width: 640px) {
+    .status { display: none; }
+    .tag { font-size: 12px; }
+    main { padding-top: 34px; padding-bottom: 48px; }
+    .lede { font-size: 15.5px; }
+  }
+
+  @media (max-width: 480px) {
+    .linkbox { flex-direction: column; gap: 8px; }
+    .linkbox input { border-right: 1px solid var(--line); border-radius: 2px; }
+    .linkbox .btn { border-radius: 2px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="bar">
+    <a class="wordmark" href="./">5<span class="colon">:</span>00</a>
+    <span class="tag">анонимная записка</span>
+    <span class="status"><span class="dot"></span>без сервера · без трекинга</span>
+  </header>
+
+  <main>
+    <noscript>
+      <p class="warn">Для шифрования и расшифровки нужен JavaScript.</p>
+    </noscript>
+
+    <section class="view" id="view-compose">
+      <p class="kicker">новая записка</p>
+      <h1>Записка, которая живёт пять минут.</h1>
+      <p class="lede">Текст сжимается и шифруется прямо в браузере, а вся записка целиком помещается в ссылку. Сервер отдаёт только страницу.</p>
+
+      <form id="compose" novalidate>
+        <label class="label" for="note-input">текст записки</label>
+        <textarea id="note-input" name="note" rows="7" placeholder="Пароль, ключ, адрес или просто сообщение…" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+
+        <div class="form-meta">
+          <div class="ttl">
+            <span class="ttl-label" id="ttl-label">живёт</span>
+            <div class="seg" role="radiogroup" aria-labelledby="ttl-label">
+              <label><input type="radio" name="ttl" value="60"><span>1 мин</span></label>
+              <label><input type="radio" name="ttl" value="300" checked><span>5 мин</span></label>
+              <label><input type="radio" name="ttl" value="900"><span>15 мин</span></label>
+            </div>
+          </div>
+          <div class="count" id="count">0 Б / 8 КБ</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="create" type="submit">Создать ссылку</button>
+          <span class="hint">Ctrl + Enter</span>
+        </div>
+        <p class="error" id="compose-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section class="view" id="view-link" hidden>
+      <p class="kicker">ссылка создана</p>
+      <h1 id="link-title">Готова.</h1>
+      <p class="lede">Это единственная копия. Скопируйте ссылку и отправьте её получателю.</p>
+
+      <div class="linkbox">
+        <input id="link" type="text" readonly aria-label="Ссылка на записку">
+        <button class="btn btn-primary" id="copy-link" type="button">Скопировать</button>
+      </div>
+
+      <dl class="facts">
+        <div><dt>сгорает</dt><dd id="expires">—</dd></div>
+        <div><dt>длина ссылки</dt><dd id="link-size">—</dd></div>
+      </dl>
+
+      <p class="warn"><strong>Ссылка — это и есть ключ.</strong> Любой, у кого она окажется до истечения срока, прочитает текст. Не выкладывайте её в открытые каналы.</p>
+      <p class="warn" id="long-warn" hidden>Ссылка длиной <span id="long-len">0</span> знаков — Telegram и другие мессенджеры могут её обрезать. Передайте её файлом или каналом без лимита.</p>
+
+      <div class="actions">
+        <button class="btn btn-ghost" id="again" type="button">Написать ещё</button>
+      </div>
+    </section>
+
+    <section class="view" id="view-note" hidden>
+      <p class="kicker">записка открыта</p>
+      <div class="timer">
+        <span class="timer-digits" id="timer">05:00</span>
+        <span class="timer-label">до сгорания</span>
+      </div>
+      <article class="note" id="note-body" aria-label="Текст записки"></article>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="copy-note" type="button">Скопировать текст</button>
+        <button class="btn btn-ghost" id="burn" type="button">Сжечь сейчас</button>
+      </div>
+
+      <p class="warn">Пока срок не истёк, ссылку можно открыть снова — и на этом устройстве, и у того, кому вы её отправили.</p>
+    </section>
+
+    <section class="view" id="view-dead" hidden>
+      <p class="kicker">пусто</p>
+      <h1 id="dead-title">Время вышло.</h1>
+      <span class="stamp" aria-hidden="true">сгорело</span>
+      <p class="lede" id="dead-text"></p>
+
+      <div class="actions">
+        <button class="btn btn-ghost" id="dead-again" type="button">Написать свою</button>
+      </div>
+    </section>
+
+    <section class="view" id="view-error" hidden>
+      <p class="kicker">ошибка</p>
+      <h1>Ссылка не читается.</h1>
+      <p class="lede">Похоже, её обрезали при копировании или изменили. Попросите отправителя сделать новую.</p>
+
+      <div class="actions">
+        <button class="btn btn-ghost" id="err-home" type="button">На главную</button>
+      </div>
+    </section>
+
+    <p class="sr-only" id="announce" aria-live="polite"></p>
+  </main>
+
+  <footer>
+    <div class="foot-row">
+      <span>пять минут · анонимная записка</span>
+      <span><a href="https://github.com/ste4ik/five-minutes" target="_blank" rel="noopener noreferrer">исходники</a></span>
+    </div>
+    <details class="how">
+      <summary>как это устроено</summary>
+      <div>
+        <p>Текст сжимается и шифруется AES-GCM в вашем браузере. Ключ и шифротекст лежат в адресе после решётки — эту часть браузер не отправляет на сервер. GitHub Pages видит только пустую страницу.</p>
+        <p>Срок жизни записан внутрь записки. Когда он кончается, страница стирает текст и адресную строку — открыть ссылку обычным способом больше не получится.</p>
+        <p>Ссылка — единственная копия и одновременно ключ. У кого она есть, тот прочитает записку до истечения срока; серверного удаления и отзыва в статике не существует.</p>
+      </div>
+    </details>
+  </footer>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const MAX_BYTES = 8192;
+  const enc = new TextEncoder();
+  const dec = new TextDecoder();
+  const $ = (sel) => document.querySelector(sel);
+
+  const views = Array.from(document.querySelectorAll('.view'));
+  const els = {
+    compose: $('#compose'),
+    noteInput: $('#note-input'),
+    count: $('#count'),
+    create: $('#create'),
+    composeError: $('#compose-error'),
+    linkTitle: $('#link-title'),
+    link: $('#link'),
+    copyLink: $('#copy-link'),
+    expires: $('#expires'),
+    linkSize: $('#link-size'),
+    longWarn: $('#long-warn'),
+    longLen: $('#long-len'),
+    again: $('#again'),
+    timer: $('#timer'),
+    noteBody: $('#note-body'),
+    copyNote: $('#copy-note'),
+    burn: $('#burn'),
+    deadTitle: $('#dead-title'),
+    deadText: $('#dead-text'),
+    deadAgain: $('#dead-again'),
+    errHome: $('#err-home'),
+    announce: $('#announce'),
+    ttlInputs: Array.from(document.querySelectorAll('input[name="ttl"]'))
+  };
+
+  let ttlSeconds = 300;
+  let timerId = null;
+  let currentText = '';
+
+  /* ---------- helpers ---------- */
+
+  function setTitle(text) {
+    document.title = text;
+  }
+
+  function showView(id) {
+    for (const view of views) view.hidden = view.id !== id;
+    window.scrollTo(0, 0);
+  }
+
+  function announce(text) {
+    if (!els.announce) return;
+    els.announce.textContent = '';
+    window.setTimeout(() => {
+      els.announce.textContent = text;
+    }, 60);
+  }
+
+  function fmtLeft(ms) {
+    const total = Math.max(0, Math.ceil(ms / 1000));
+    const m = Math.floor(total / 60);
+    const s = total % 60;
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+
+  function fmtBytes(n) {
+    if (n < 1024) return n + ' Б';
+    return (n / 1024).toFixed(1).replace('.', ',') + ' КБ';
+  }
+
+  function fmtTime(ts) {
+    try {
+      return new Date(ts).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function fmtWhen(ts) {
+    try {
+      return new Date(ts).toLocaleString('ru-RU', {
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function b64uEnc(bytes) {
+    let bin = '';
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) {
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    }
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function b64uDec(str) {
+    if (!/^[A-Za-z0-9_-]+$/.test(str)) throw new Error('bad base64url');
+    const norm = str.replace(/-/g, '+').replace(/_/g, '/');
+    const pad = norm.length % 4 ? '='.repeat(4 - (norm.length % 4)) : '';
+    const bin = atob(norm + pad);
+    const out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  function hasCompression() {
+    return typeof CompressionStream === 'function' && typeof DecompressionStream === 'function';
+  }
+
+  async function pipeBytes(bytes, transform) {
+    const stream = new Blob([bytes]).stream().pipeThrough(transform);
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  }
+
+  /* ---------- compose ---------- */
+
+  function updateCount() {
+    const n = enc.encode(els.noteInput.value).length;
+    els.count.textContent = fmtBytes(n) + ' / 8 КБ';
+    els.count.classList.toggle('over', n > MAX_BYTES);
+  }
+
+  function showError(text) {
+    els.composeError.textContent = text;
+    els.composeError.hidden = false;
+  }
+
+  function hideError() {
+    els.composeError.hidden = true;
+    els.composeError.textContent = '';
+  }
+
+  async function createLink(event) {
+    event.preventDefault();
+    hideError();
+
+    const text = els.noteInput.value;
+    const bytes = enc.encode(text);
+
+    if (!text.trim()) {
+      showError('Сначала введите текст.');
+      els.noteInput.focus();
+      return;
+    }
+    if (bytes.length > MAX_BYTES) {
+      showError('Слишком много: ' + fmtBytes(bytes.length) + ' при пределе 8 КБ. Сократите текст.');
+      return;
+    }
+    if (!(window.crypto && crypto.subtle)) {
+      showError('Браузер не дал доступ к шифрованию (Web Crypto). Нужен HTTPS и современный браузер.');
+      return;
+    }
+
+    els.create.disabled = true;
+    els.create.textContent = 'Шифрую…';
+
+    try {
+      const now = Date.now();
+      const expires = now + ttlSeconds * 1000;
+      const payload = JSON.stringify({ v: 1, t: text, c: now, e: expires });
+
+      let packed = enc.encode(payload);
+      let flags = 0;
+      if (hasCompression()) {
+        try {
+          packed = await pipeBytes(packed, new CompressionStream('deflate-raw'));
+          flags = 1;
+        } catch (e) {
+          packed = enc.encode(payload);
+          flags = 0;
+        }
+      }
+
+      const key = crypto.getRandomValues(new Uint8Array(32));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['encrypt']);
+      const cipher = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, cryptoKey, packed));
+
+      const body = new Uint8Array(1 + iv.length + cipher.length);
+      body[0] = flags;
+      body.set(iv, 1);
+      body.set(cipher, 1 + iv.length);
+
+      const url = location.origin + location.pathname + '#1.' + b64uEnc(key) + '.' + b64uEnc(body);
+
+      els.link.value = url;
+      els.expires.textContent = fmtWhen(expires);
+      els.linkSize.textContent = fmtBytes(url.length);
+      els.linkTitle.textContent = 'Готова. Сгорает в ' + fmtTime(expires) + '.';
+
+      const tooLongForChats = url.length > 4096;
+      els.longWarn.hidden = !tooLongForChats;
+      if (tooLongForChats) els.longLen.textContent = url.length.toLocaleString('ru-RU');
+
+      history.replaceState(null, '', url);
+      setTitle('Ссылка готова — Пять минут');
+      showView('view-link');
+      els.link.focus();
+      els.link.select();
+      announce('Ссылка создана. Сгорает ' + fmtWhen(expires) + '.');
+    } catch (err) {
+      console.error(err);
+      showError('Не удалось зашифровать записку. Попробуйте другой браузер.');
+    } finally {
+      els.create.disabled = false;
+      els.create.textContent = 'Создать ссылку';
+    }
+  }
+
+  /* ---------- view / burn ---------- */
+
+  function clearTimer() {
+    if (timerId !== null) {
+      window.clearInterval(timerId);
+      timerId = null;
+    }
+    currentText = '';
+  }
+
+  function tick(expires) {
+    const left = expires - Date.now();
+    if (left <= 0) {
+      dead('expired', expires);
+      return;
+    }
+    els.timer.textContent = fmtLeft(left);
+    els.timer.classList.toggle('danger', left <= 30000);
+  }
+
+  function openNote(payload) {
+    currentText = payload.t;
+    els.noteBody.textContent = payload.t;
+    els.timer.classList.remove('danger');
+    els.timer.textContent = fmtLeft(payload.e - Date.now());
+    setTitle('Записка до ' + fmtTime(payload.e) + ' — Пять минут');
+    showView('view-note');
+    announce('Записка открыта. Сгорит ' + fmtWhen(payload.e) + '.');
+    tick(payload.e);
+    if (payload.e > Date.now()) {
+      timerId = window.setInterval(() => tick(payload.e), 500);
+    }
+  }
+
+  function dead(reason, expiresAt) {
+    clearTimer();
+    els.timer.textContent = '00:00';
+    els.noteBody.textContent = '';
+
+    if (reason === 'burned') {
+      els.deadTitle.textContent = 'Сожжено.';
+      els.deadText.textContent = 'Записка стёрта из этой вкладки и адресной строки. У того, кто сохранил ссылку, копия проживёт до конца срока.';
+    } else {
+      els.deadTitle.textContent = 'Время вышло.';
+      els.deadText.textContent = expiresAt
+        ? 'Срок истёк ' + fmtWhen(expiresAt) + '. Восстановить записку нельзя: других копий не существует.'
+        : 'Срок истёк. Восстановить записку нельзя: других копий не существует.';
+    }
+
+    history.replaceState(null, '', location.pathname + location.search);
+    setTitle('Сгорело — Пять минут');
+    showView('view-dead');
+    announce('Записка сгорела.');
+  }
+
+  async function openFromHash() {
+    try {
+      const parts = location.hash.slice(1).split('.');
+      if (parts.length !== 3 || parts[0] !== '1') throw new Error('bad format');
+
+      const key = b64uDec(parts[1]);
+      const body = b64uDec(parts[2]);
+      if (key.length !== 32 || body.length < 29) throw new Error('bad lengths');
+
+      const flags = body[0] & 1;
+      const iv = body.slice(1, 13);
+      const cipher = body.slice(13);
+
+      const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'AES-GCM' }, false, ['decrypt']);
+      const plain = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, cipher));
+
+      let bytes = plain;
+      if (flags) {
+        if (typeof DecompressionStream !== 'function') throw new Error('no decompression');
+        bytes = await pipeBytes(plain, new DecompressionStream('deflate-raw'));
+      }
+
+      const payload = JSON.parse(dec.decode(bytes));
+      if (!payload || typeof payload.t !== 'string' || typeof payload.e !== 'number') {
+        throw new Error('bad payload');
+      }
+
+      if (Date.now() >= payload.e) {
+        history.replaceState(null, '', location.pathname + location.search);
+        dead('expired', payload.e);
+        return;
+      }
+
+      openNote(payload);
+    } catch (err) {
+      console.error(err);
+      history.replaceState(null, '', location.pathname + location.search);
+      setTitle('Ссылка не читается — Пять минут');
+      showView('view-error');
+    }
+  }
+
+  function route() {
+    clearTimer();
+    if (location.hash.indexOf('#1.') === 0) {
+      openFromHash();
+    } else {
+      setTitle('Пять минут — анонимная записка');
+      showView('view-compose');
+    }
+  }
+
+  function goHome() {
+    clearTimer();
+    history.replaceState(null, '', location.pathname + location.search);
+    els.compose.reset();
+    els.noteInput.value = '';
+    ttlSeconds = 300;
+    hideError();
+    els.create.disabled = false;
+    els.create.textContent = 'Создать ссылку';
+    updateCount();
+    setTitle('Пять минут — анонимная записка');
+    showView('view-compose');
+    els.noteInput.focus();
+  }
+
+  /* ---------- clipboard ---------- */
+
+  function execCopy(text) {
+    const area = document.createElement('textarea');
+    area.value = text;
+    area.setAttribute('readonly', '');
+    area.style.position = 'fixed';
+    area.style.top = '-1000px';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    let ok = false;
+    try {
+      ok = document.execCommand('copy');
+    } catch (e) {
+      ok = false;
+    }
+    area.remove();
+    return ok;
+  }
+
+  async function copy(text, button) {
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(text);
+      ok = true;
+    } catch (e) {
+      ok = execCopy(text);
+    }
+    const label = button.textContent;
+    button.textContent = ok ? 'Скопировано' : 'Скопируйте вручную';
+    button.classList.toggle('is-done', ok);
+    window.setTimeout(() => {
+      button.textContent = label;
+      button.classList.remove('is-done');
+    }, 1600);
+  }
+
+  /* ---------- bind ---------- */
+
+  els.compose.addEventListener('submit', createLink);
+
+  els.noteInput.addEventListener('input', () => {
+    hideError();
+    updateCount();
+  });
+
+  els.noteInput.addEventListener('keydown', (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+      event.preventDefault();
+      els.compose.requestSubmit();
+    }
+  });
+
+  for (const input of els.ttlInputs) {
+    input.addEventListener('change', () => {
+      if (input.checked) ttlSeconds = Number(input.value);
+    });
+  }
+
+  els.copyLink.addEventListener('click', () => copy(els.link.value, els.copyLink));
+  els.copyNote.addEventListener('click', () => copy(currentText, els.copyNote));
+
+  els.burn.addEventListener('click', () => {
+    const sure = window.confirm('Сжечь записку в этой вкладке? Ссылка у получателя продолжит работать до конца срока.');
+    if (sure) dead('burned', null);
+  });
+
+  els.again.addEventListener('click', goHome);
+  els.deadAgain.addEventListener('click', goHome);
+  els.errHome.addEventListener('click', goHome);
+
+  window.addEventListener('hashchange', route);
+
+  updateCount();
+  route();
+})();
+</script>
+</body>
+</html>
